@@ -1,5 +1,5 @@
 openpyxl==3.0.10
-plotly==4.14.3
+plotly==5.1.0
 pandas==1.4.4
 matplotlib==3.6.1
 numpy==1.23.0
