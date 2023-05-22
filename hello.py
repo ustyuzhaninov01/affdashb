@@ -14,7 +14,7 @@ from pathlib import Path
 
 
 st.set_page_config(
-    page_title = "Everyone Can Support",
+    page_title = "AFFDASH",
     page_icon = ":phone:",
     initial_sidebar_state="expanded",
     layout="wide",
