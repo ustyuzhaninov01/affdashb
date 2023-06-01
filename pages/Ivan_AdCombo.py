@@ -117,6 +117,10 @@ st.plotly_chart(fig_tokens_by_csi, use_container_width=True)
 
 
 
+
+
+
+
 fig_tokens_by_com = px.bar(
      tokens_by_com,
        x=tokens_by_com.index,
@@ -132,8 +136,5 @@ fig_tokens_by_com.update_layout(
        yaxis=(dict(showgrid=False)),
     )
 st.plotly_chart(fig_tokens_by_com, use_container_width=True)
-
-
-
 
 
