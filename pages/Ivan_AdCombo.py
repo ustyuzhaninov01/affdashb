@@ -36,17 +36,8 @@ df = df.drop_duplicates(subset=["id", "status"])
 # Group by "status" and count the occurrences of "id"
 tokens_by_csi = df.groupby("status").count()[["id"]]
 
-# Group by "status" and count the occurrences of "id"
-tokens_by_csi = df.groupby("status").count()[["id"]]
-st.dataframe(tokens_by_csi)
-
-
-
 tokens_by_month = df.sort_values(by=["date"], ascending=True).groupby('date').count()
 # Identify duplicates based on "id"
-
-
-
 
 tokens_by_com = df.groupby(by=["question"]).count()[["id"]]
 
