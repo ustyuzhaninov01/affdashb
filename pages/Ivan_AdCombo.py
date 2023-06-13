@@ -26,8 +26,28 @@ def get_data_from_excel():
 
 df = get_data_from_excel()
 
+# Identify duplicate "id" rows with "waiting answers" status
+duplicates = df[df["status"] == "waiting answers"].duplicated(subset="id", keep=False)
+
+# Update the status to "activate" for duplicate "id" rows with "waiting answers" status
+# Drop the duplicate "id" rows with "waiting answers" status
+df = df.drop_duplicates(subset=["id", "status"])
+
+# Group by "status" and count the occurrences of "id"
+tokens_by_csi = df.groupby("status").count()[["id"]]
+
+# Group by "status" and count the occurrences of "id"
+tokens_by_csi = df.groupby("status").count()[["id"]]
+st.dataframe(tokens_by_csi)
+
+
+
 tokens_by_month = df.sort_values(by=["date"], ascending=True).groupby('date').count()
-tokens_by_csi = df.groupby(by=["status"]).count()[["id"]]
+# Identify duplicates based on "id"
+
+
+
+
 tokens_by_com = df.groupby(by=["question"]).count()[["id"]]
 
 # Expander 1 - Tokens by day
