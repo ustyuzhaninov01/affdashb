@@ -27,14 +27,7 @@ def get_data_from_excel():
 df = get_data_from_excel()
 
 # Identify duplicate "id" rows with "waiting answers" status
-duplicates = df[df["status"] == "waiting answers"].duplicated(subset="id", keep=False)
 
-# Update the status to "activate" for duplicate "id" rows with "waiting answers" status
-# Drop the duplicate "id" rows with "waiting answers" status
-df = df.drop_duplicates(subset=["id", "status"])
-
-# Group by "status" and count the occurrences of "id"
-tokens_by_csi = df.groupby("status").count()[["id"]]
 
 tokens_by_month = df.sort_values(by=["date"], ascending=True).groupby('date').count()
 # Identify duplicates based on "id"
@@ -89,23 +82,9 @@ with st.expander("Tokens by In/Out, by Day"):
     )
     st.plotly_chart(fig_tokens_by_date_inout, use_container_width=True)
 
-# Expander 3 - Tokens by status
-with st.expander("Tokens by Status"):
-    fig_tokens_by_csi = px.bar(
-        tokens_by_csi,
-        x=tokens_by_csi.index,
-        y="id",
-        text="id",
-        title="<b>Tokens by status</b>",
-        color_discrete_sequence=["#0083B8"] * len(tokens_by_csi),
-        template="plotly_white",
-    )
-    fig_tokens_by_csi.update_layout(
-        xaxis=dict(tickmode="linear"),
-        plot_bgcolor="rgba(0,0,0,0)",
-        yaxis=(dict(showgrid=False)),
-    )
-    st.plotly_chart(fig_tokens_by_csi, use_container_width=True)
+
+
+
 
 # Expander 4 - Tokens by question
 with st.expander("Tokens by Question"):
@@ -124,6 +103,39 @@ with st.expander("Tokens by Question"):
         yaxis=(dict(showgrid=False)),
     )
     st.plotly_chart(fig_tokens_by_com, use_container_width=True)
+
+
+
+
+duplicates = df[df["status"] == "waiting answers"].duplicated(subset="id", keep=False)
+
+# Update the status to "activate" for duplicate "id" rows with "waiting answers" status
+# Drop the duplicate "id" rows with "waiting answers" status
+df = df.drop_duplicates(subset=["id", "status"])
+
+# Group by "status" and count the occurrences of "id"
+tokens_by_csi = df.groupby("status").count()[["id"]]
+
+# Expander 3 - Tokens by status
+with st.expander("Tokens by Status"):
+    fig_tokens_by_csi = px.bar(
+        tokens_by_csi,
+        x=tokens_by_csi.index,
+        y="id",
+        text="id",
+        title="<b>Tokens by status</b>",
+        color_discrete_sequence=["#0083B8"] * len(tokens_by_csi),
+        template="plotly_white",
+    )
+    fig_tokens_by_csi.update_layout(
+        xaxis=dict(tickmode="linear"),
+        plot_bgcolor="rgba(0,0,0,0)",
+        yaxis=(dict(showgrid=False)),
+    )
+    st.plotly_chart(fig_tokens_by_csi, use_container_width=True)
+
+
+
 
 def get_data_from_excel():
     df1 = pd.read_excel(
