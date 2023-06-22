@@ -134,8 +134,6 @@ with st.expander("Tokens by Status"):
     )
     st.plotly_chart(fig_tokens_by_csi, use_container_width=True)
 
-po
-
 
 def get_data_from_excel():
     df1 = pd.read_excel(
