@@ -32,7 +32,7 @@ df = get_data_from_excel()
 tokens_by_month = df.sort_values(by=["date"], ascending=True).groupby('date').count()
 # Identify duplicates based on "id"
 
-tokens_by_com = df.groupby(by=["question"]).count()[["id"]]
+
 
 # Expander 1 - Tokens by day
 with st.expander("Tokens by Day"):
@@ -85,7 +85,7 @@ with st.expander("Tokens by In/Out, by Day"):
 
 
 
-
+tokens_by_com = df.groupby(by=["question"]).count()[["id"]]
 # Expander 4 - Tokens by question
 with st.expander("Tokens by Question"):
     fig_tokens_by_com = px.bar(
@@ -104,7 +104,28 @@ with st.expander("Tokens by Question"):
     )
     st.plotly_chart(fig_tokens_by_com, use_container_width=True)
 
+tokens_by_qd = df.groupby([df["question"], df["date"].dt.date]).count()[["id"]]
 
+
+
+# Expander - Tokens by Question by Day
+with st.expander("Tokens by Question by Day"):
+    fig_tokens_by_qd = px.bar(
+        tokens_by_qd.reset_index(),
+        x="date",
+        y="id",
+        text="id",
+        title="<b>Tokens by Question by Day</b>",
+        color="question",
+        color_discrete_sequence=px.colors.qualitative.Set1,
+        template="plotly_white",
+    )
+    fig_tokens_by_qd.update_layout(
+        xaxis=dict(tickmode="linear"),
+        plot_bgcolor="rgba(0,0,0,0)",
+        yaxis=dict(showgrid=False),
+    )
+    st.plotly_chart(fig_tokens_by_qd, use_container_width=True)
 
 
 duplicates = df[df["status"] == "waiting answers"].duplicated(subset="id", keep=False)
