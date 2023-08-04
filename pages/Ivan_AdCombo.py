@@ -97,7 +97,7 @@ tokens_by_qd = df.groupby([df["question"], df["date"].dt.date]).count()[["id"]]
 
 
 # Expander - Tokens by Question by Day
-with st.expander("Tokens by Question by Day"):
+with st.expander("Tokens by Question by Day!"):
     fig_tokens_by_qd = px.bar(
         tokens_by_qd.reset_index(),
         x="date",
