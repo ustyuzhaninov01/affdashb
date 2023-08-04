@@ -32,7 +32,11 @@ df = get_data_from_excel()
 tokens_by_month = df.sort_values(by=["date"], ascending=True).groupby('date').count()
 # Identify duplicates based on "id"
 
+df['id'] = df['id'].astype(str)
 
+# Display the DataFrame using st.dataframe()
+with st.expander("Dataframe"):
+    st.dataframe(df)
 
 # Expander 1 - Tokens by day
 with st.expander("Tokens by Day"):
@@ -86,22 +90,7 @@ with st.expander("Tokens by In/Out, by Day"):
 
 tokens_by_com = df.groupby(by=["question"]).count()[["id"]]
 # Expander 4 - Tokens by question
-with st.expander("Tokens by Question"):
-    fig_tokens_by_com = px.bar(
-        tokens_by_com,
-        x=tokens_by_com.index,
-        y="id",
-        text="id",
-        title="<b>Tokens by question</b>",
-        color_discrete_sequence=["#0083B8"] * len(tokens_by_com),
-        template="plotly_white",
-    )
-    fig_tokens_by_com.update_layout(
-        xaxis=dict(tickmode="linear"),
-        plot_bgcolor="rgba(0,0,0,0)",
-        yaxis=(dict(showgrid=False)),
-    )
-    st.plotly_chart(fig_tokens_by_com, use_container_width=True)
+
 
 tokens_by_qd = df.groupby([df["question"], df["date"].dt.date]).count()[["id"]]
 
@@ -195,6 +184,8 @@ with st.expander("Active/Suspended by Month"):
     )
 
     st.plotly_chart(fig_status_by_month, use_container_width=True)
+
+
 
 
 
