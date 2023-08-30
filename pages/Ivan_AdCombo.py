@@ -50,11 +50,12 @@ with st.expander("Tokens by Day"):
         template="plotly_white",
     )
     fig_tokens_by_month.update_layout(
-        xaxis=dict(tickmode="linear"),
+        xaxis=dict(tickmode="auto", nticks=15, tickformat="%b %d" if len(tokens_by_month.index) > 30 else "%b"),
         plot_bgcolor="rgba(0,0,0,0)",
-        yaxis=(dict(showgrid=False)),
+        yaxis=dict(showgrid=False),
     )
     st.plotly_chart(fig_tokens_by_month, use_container_width=True)
+
 
 # Expander 2 - Tokens by in_out, by day
 with st.expander("Tokens by In/Out, by Day"):
@@ -80,7 +81,7 @@ with st.expander("Tokens by In/Out, by Day"):
     fig_tokens_by_date_inout.update_layout(
         barmode="stack",
         title="<b>Tokens by in_out, by day</b>",
-        xaxis=dict(tickmode="linear"),
+        xaxis=dict(tickmode="auto", nticks=15, tickformat="%b %d" if len(tokens_by_date_inout_pivot.index) > 30 else "%b"),
         yaxis=dict(showgrid=False),
         plot_bgcolor="rgba(0,0,0,0)",
     )
@@ -88,18 +89,18 @@ with st.expander("Tokens by In/Out, by Day"):
 
 
 
-tokens_by_com = df.groupby(by=["question"]).count()[["id"]]
-# Expander 4 - Tokens by question
+
 
 
 tokens_by_qd = df.groupby([df["question"], df["date"].dt.date]).count()[["id"]]
 
-
+# Reset the index to make "question" and "date" accessible as columns
+tokens_by_qd = tokens_by_qd.reset_index()
 
 # Expander - Tokens by Question by Day
 with st.expander("Tokens by Question by Day!"):
     fig_tokens_by_qd = px.bar(
-        tokens_by_qd.reset_index(),
+        tokens_by_qd,
         x="date",
         y="id",
         text="id",
@@ -109,11 +110,13 @@ with st.expander("Tokens by Question by Day!"):
         template="plotly_white",
     )
     fig_tokens_by_qd.update_layout(
-        xaxis=dict(tickmode="linear"),
+        xaxis=dict(tickmode="auto", nticks=15, tickformat="%b %d" if len(tokens_by_qd["date"].unique()) > 30 else "%b"),
         plot_bgcolor="rgba(0,0,0,0)",
         yaxis=dict(showgrid=False),
     )
     st.plotly_chart(fig_tokens_by_qd, use_container_width=True)
+
+
 
 
 duplicates = df[df["status"] == "waiting answers"].duplicated(subset="id", keep=False)
