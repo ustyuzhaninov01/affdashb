@@ -188,6 +188,51 @@ with st.expander("Active/Suspended by Month"):
 
     st.plotly_chart(fig_status_by_month, use_container_width=True)
 
+import pandas as pd
+import streamlit as st
+import plotly.express as px
+
+def get_data_from_excel():
+    df = pd.read_excel(
+        io="reports/new_file_path.xlsx",
+        engine="openpyxl",
+        skiprows=0,
+        parse_dates=["last_activity"],  # Specify the datetime column
+        sheet_name="new_file_path"  # Specify the sheet name
+    )
+    return df
+
+df10 = get_data_from_excel()
+
+# Now you can use the .dt accessor on the "last_activity" column
+tokens_by_qd = df10.groupby([df10["extra_state"], df10["last_activity"].dt.date]).count()[["id"]]
+
+# Reset the index to make "extra_state" and "last_activity" accessible as columns
+tokens_by_qd = tokens_by_qd.reset_index()
+
+# Calculate the total count for all "extra_state" values
+total_count = df10["id"].count()
+
+# Create a pie chart to visualize the distribution of "id" values by "extra_state"
+fig_tokens_by_qd = px.pie(
+    tokens_by_qd,
+    names="extra_state",
+    values="id",
+    title="Tokens by Call center status",
+    hole=0.3,
+)
+
+# Add a total count annotation to the chart
+fig_tokens_by_qd.add_annotation(
+    text=f"Total Tokens: {total_count}",
+    showarrow=False,
+    x=0.5, y=0.5,
+    font=dict(size=14),
+)
+
+# Expander - Tokens by Call center status
+with st.expander("Tokens by Call center status!"):
+    st.plotly_chart(fig_tokens_by_qd, use_container_width=True)
 
 
 
