@@ -90,11 +90,6 @@ with st.expander("Tokens by In/Out, by Day"):
     )
     st.plotly_chart(fig_tokens_by_date_inout, use_container_width=True)
 
-
-
-
-
-
 tokens_by_qd = df.groupby([df["question"], df["date"].dt.date]).count()[["id"]]
 
 # Reset the index to make "question" and "date" accessible as columns
@@ -236,12 +231,6 @@ fig_tokens_by_qd.add_annotation(
 # Expander - Tokens by Call center status
 with st.expander("Tokens by Call center status!"):
     st.plotly_chart(fig_tokens_by_qd, use_container_width=True)
-
-
-
-
-
-
 
 
 
